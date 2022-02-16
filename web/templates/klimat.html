@@ -1,0 +1,163 @@
+{% extends "base.html"%}
+{% block title %}Warunki{% endblock %}
+{% block content %}
+
+<div class='container-fluid'>
+    <div class='rectangle'>
+        <div id="tytuł">
+            <h1>Warunki</h1>
+            <p>Wybierz gatunek z dostępnej listy lub samodzielnie dokonaj zmian w trybie manualnym</p>
+        </div>
+    </div>
+<div class="row justify-content-center">
+<div class="col-md-5">
+  <form action="{{ request.path }}" method="POST"> 
+    <div id="form-check" style="text-align:center">
+      <input class="form-check-input" type="radio" name="mode" id="inlineRadio1" value=1  {% if selectedMode == 1  %} checked {% endif %}>
+      <label class="form-check-label" for="inlineRadio1">Tryb automatyczny</label>
+    </div>
+    <div id="lista1" name="id" class="col-md-7">
+      <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text mt-2" for="inputGroupSelect01">Wybierz gatunek pająka:</label>
+          </div>
+          <select class="custom-select mt-2" id="inputGroupSelect01" name="id">
+            <option selected value="1">Wybierz...</option>
+            {% for animal in animals %}
+            <option value= {{ animal.id }}>{{ animal.animal_name }} </option>
+            {% endfor %}
+          </select>
+      </div> 
+  </div>
+  
+  <div id='lista1'><button type="submit" class="btn btn-success ml-2">Zatwierdź</button></div>
+  <br>
+  <div id='lista1'>
+    {% if animalAuto %}
+    Wybrano tryb dla pająka:   {{ animalAuto.animal_name }}
+    {% endif %}
+  </div>
+</div>
+<div class="col-md-7">
+  <div id="form-check" style="text-align:center">
+    <input class="form-check-input" type="radio" name="mode" id="inlineRadio2" value=2 {% if selectedMode == 2  %} checked {% endif %}>
+    <label class="form-check-label" for="inlineRadio2">Tryb manualny</label>
+  </div>
+  <div id="ostrzezenie">
+    <p><em>Uwaga! W przypadku braku pewności odnośnie odpowiednich warunków dla danego gatunku zaleca się pozostanie w trybie automatycznym.</em></p>
+</div>
+  <div class="col-md-5 m-auto">
+    <div id="lista2">
+      <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Temperatura za dnia:</span>
+          </div>
+          <input type="text" class="form-control" name="day_temp" aria-label="Stopnie Celsjusza (np 23.5)" value={% if animalAuto %}{{ animalAuto.day_temp}}{% elif animal_day_temp %}{{ animal_day_temp }}{% endif %}>
+          <div class="input-group-append">
+            <span class="input-group-text">°C</span>
+          </div>
+        </div>
+  </div>
+
+  <div id="lista2">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Temperatura w nocy:</span>
+        </div>
+        <input type="text" class="form-control" name="night_temp" aria-label="Stopnie Celsjusza (np 23.5)" value={% if animalAuto %}{{ animalAuto.night_temp}}{% elif animal_night_temp %}{{ animal_night_temp }}{% endif %}>
+        <div class="input-group-append">
+          <span class="input-group-text">°C</span>
+        </div>
+      </div>
+</div>
+
+<div id="lista2">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Wilgotność:&nbsp&nbsp</span>
+        </div>
+        <input type="text" class="form-control" name="day_wet" aria-label="Wilgotność (np 50)" value={% if animalAuto %}{{ animalAuto.day_wet}}{% elif animal_day_wet %}{{ animal_day_wet }}{% endif %}>
+        <div class="input-group-append">
+          <span class="input-group-text">&nbsp%</span>
+        </div>
+      </div>
+</div>
+
+<div id="lista2">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Rozpoczęcie trybu dziennego:</label>
+        </div>
+        <select class="custom-select" id="inputGroupSelect01" name="d_start">
+          <option selected value={% if animalAuto %}{{ animalAuto.day_start}}{% elif animal_d_start %}{{ animal_d_start }}{% endif %}>{% if animalAuto %}{{ animalAuto.day_start}}{% elif animal_d_start %}{{ animal_d_start }}{% endif %}</option>
+          <option value="0">00:00</option>
+          <option value="1">1:00</option>
+          <option value="2">2:00</option>
+          <option value="3">3:00</option>
+          <option value="4">4:00</option>
+          <option value="5">5:00</option>
+          <option value="6">6:00</option>
+          <option value="7">7:00</option>
+          <option value="8">8:00</option>
+          <option value="9">9:00</option>
+          <option value="10">10:00</option>
+          <option value="11">11:00</option>
+          <option value="12">12:00</option>
+          <option value="13">13:00</option>
+          <option value="14">14:00</option>
+          <option value="15">15:00</option>
+          <option value="16">16:00</option>
+          <option value="17">17:00</option>
+          <option value="18">18:00</option>
+          <option value="19">19:00</option>
+          <option value="20">20:00</option>
+          <option value="21">21:00</option>
+          <option value="22">22:00</option>
+          <option value="23">23:00</option>
+        </select>
+      </div>
+    </div> 
+
+    <div id='lista2'>  
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect01">Rozpoczęcie trybu nocnego:&nbsp&nbsp&nbsp</label>
+        </div>
+        <select class="custom-select" id="inputGroupSelect01" name="n_start">
+          <option selected value={% if animalAuto %}{{ animalAuto.night_start}}{% elif animal_n_start %}{{ animal_n_start }}{% endif %}>{% if animalAuto %}{{ animalAuto.night_start}}{% elif animal_n_start %}{{ animal_n_start }}{% endif %}</option>
+          <option value="0">00:00</option>
+          <option value="1">1:00</option>
+          <option value="2">2:00</option>
+          <option value="3">3:00</option>
+          <option value="4">4:00</option>
+          <option value="5">5:00</option>
+          <option value="6">6:00</option>
+          <option value="7">7:00</option>
+          <option value="8">8:00</option>
+          <option value="9">9:00</option>
+          <option value="10">10:00</option>
+          <option value="11">11:00</option>
+          <option value="12">12:00</option>
+          <option value="13">13:00</option>
+          <option value="14">14:00</option>
+          <option value="15">15:00</option>
+          <option value="16">16:00</option>
+          <option value="17">17:00</option>
+          <option value="18">18:00</option>
+          <option value="19">19:00</option>
+          <option value="20">20:00</option>
+          <option value="21">21:00</option>
+          <option value="22">22:00</option>
+          <option value="23">23:00</option>
+        </select>
+      </div> 
+</div>
+<div id="lista2" class="mb-5"><button type="submit" class="btn btn-success">Zatwierdź</button></div>
+</div>
+</div>
+</form>
+</div>
+    
+</div>
+
+{% endblock %}

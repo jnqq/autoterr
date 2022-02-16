@@ -1,0 +1,125 @@
+{% extends "base.html"%}
+{% block title %}Dodaj zwierzaka{% endblock %}
+{%block content%}
+
+<div class="container text-center">
+  <div class="justify-content-center text-center"></div>
+    <form action="{{ request.path }}" method='POST'>
+        <br />
+        <h2 align = 'center'>Dodaj zwierzaka</h2>
+        <div class="form-group col-md-6 login_row text-left">
+            <input type="name" class="form-control" name='animalName' id="animalName" required placeholder="Nazwa">
+        </div>
+
+        <div id="lista2">
+            <div class="input-group mb-3 col-md-6 login_row">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Temperatura za dnia:</span>
+                </div>
+                <input type="text" name="tempD" class="form-control" aria-label="Stopnie Celsjusza (np 23.5)" required>
+                <div class="input-group-append">
+                  <span class="input-group-text">°C</span>
+                </div>
+              </div>
+        </div>
+
+        <div id="lista2">
+            <div class="input-group mb-3 col-md-6 login_row">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Temperatura w nocy:</span>
+                </div>
+                <input type="text" class="form-control" name="tempN" aria-label="Stopnie Celsjusza (np 23.5)" required>  
+                <div class="input-group-append">
+                  <span class="input-group-text">°C</span>
+                </div>
+              </div>
+        </div>
+
+        <div id="lista2">
+            <div class="input-group mb-3 col-md-6 login_row">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Wilgotność za dnia:&nbsp&nbsp</span>
+                </div>
+                <input type="text" class="form-control" name="wetD" aria-label="Wilgotność (np 50)" required>
+                <div class="input-group-append">
+                  <span class="input-group-text">&nbsp%</span>
+                </div>
+              </div>
+        </div>
+
+        <div id="lista2">
+            <div class="input-group mb-3 col-md-6 login_row">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Rozpoczęcie trybu dziennego:</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01" name="day_start">
+                  <option selected>Wybierz...</option>
+                  <option value="0">00:00</option>
+                  <option value="1">1:00</option>
+                  <option value="2">2:00</option>
+                  <option value="3">3:00</option>
+                  <option value="4">4:00</option>
+                  <option value="5">5:00</option>
+                  <option value="6">6:00</option>
+                  <option value="7">7:00</option>
+                  <option value="8">8:00</option>
+                  <option value="9">9:00</option>
+                  <option value="10">10:00</option>
+                  <option value="11">11:00</option>
+                  <option value="12">12:00</option>
+                  <option value="13">13:00</option>
+                  <option value="14">14:00</option>
+                  <option value="15">15:00</option>
+                  <option value="16">16:00</option>
+                  <option value="17">17:00</option>
+                  <option value="18">18:00</option>
+                  <option value="19">19:00</option>
+                  <option value="20">20:00</option>
+                  <option value="21">21:00</option>
+                  <option value="22">22:00</option>
+                  <option value="23">23:00</option>
+                </select>
+              </div>
+            </div>
+
+            <div id='lista2'>
+              <div class="input-group mb-3 col-md-6 login_row">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="inputGroupSelect01">Rozpoczęcie trybu nocnego:</label>
+                </div>
+                <select class="custom-select" id="inputGroupSelect01" name="night_start">
+                  <option selected>Wybierz...</option>
+                  <option value="0">00:00</option>
+                  <option value="1">1:00</option>
+                  <option value="2">2:00</option>
+                  <option value="3">3:00</option>
+                  <option value="4">4:00</option>
+                  <option value="5">5:00</option>
+                  <option value="6">6:00</option>
+                  <option value="7">7:00</option>
+                  <option value="8">8:00</option>
+                  <option value="9">9:00</option>
+                  <option value="10">10:00</option>
+                  <option value="11">11:00</option>
+                  <option value="12">12:00</option>
+                  <option value="13">13:00</option>
+                  <option value="14">14:00</option>
+                  <option value="15">15:00</option>
+                  <option value="16">16:00</option>
+                  <option value="17">17:00</option>
+                  <option value="18">18:00</option>
+                  <option value="19">19:00</option>
+                  <option value="20">20:00</option>
+                  <option value="21">21:00</option>
+                  <option value="22">22:00</option>
+                  <option value="23">23:00</option>
+                </select>
+              </div>
+        </div>
+
+        <div id="lista2"><button type="submit" class="btn btn-success">Zatwierdź</button></div>
+    </form>
+    </div>
+</div>
+
+{%endblock%}

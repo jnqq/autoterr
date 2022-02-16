@@ -1,0 +1,99 @@
+.rectangle {width: auto;height: auto; margin: 40px;}
+.square {width: auto; height: auto; float:left;margin-right: 50px; margin-bottom: 50px; margin-left: 50px; margin-top: 10px;}
+#check {float:left;}
+#wybranygatunek {float: left; margin: 5px; margin-left: 50px;}
+#tytuł {text-align: center; margin: 20px;}
+#ostrzezenie {float:left; margin: 5px; margin-left: 10px;color: rgb(255, 0, 51);}
+#lista1 {
+display: flex;
+    justify-content: center;
+    margin: auto;
+
+}
+input[type=checkbox] {transform: scale(2); margin: 10px;}
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #101313;
+    color: white;
+    text-align: center;
+    }
+
+
+.nav_{
+    background-color: #101313 !important;
+}
+
+.dropdown-menu{
+    background-color: #101313 !important;
+
+}
+
+@media screen and (min-width:1000px){
+    .dropdown-menu{
+        margin-left:-49.5px !important;
+    }
+    #lista1 button{
+        margin-top: .5rem!important;
+    }
+
+    #kamera{
+        margin-bottom:30px !important;
+    }
+
+}
+
+@media screen and (max-width:800px){
+    .bottom{
+       margin-bottom:50px;
+    }
+    .tabelka{
+        margin-bottom: 50px !important;
+    }
+    #wybranygatunek{
+        margin-top: 20px;
+    }
+
+    html body div.container-fluid div.col-md-7.float-left div.row.mb-5.col-md-11{
+        margin-bottom:10px !important;
+        margin-top: 25px !important;
+    }
+
+    .index_name{
+        font-size: 18px !important;
+    }
+}
+
+body{
+
+        background-color: #2B2C2C !important;
+        color: white !important;
+}
+
+.login_row{
+    margin: auto;
+    margin-top: 15px;
+}
+
+.dropdown-item{
+    color: rgba(255,255,255,.5) !important;
+}
+
+.table th{
+    color: whitesmoke;
+}
+
+.navbar-custom {background-color: #000000 !important;}
+.navbar-custom .navbar-brand {color: rgb(255, 255, 255);}
+.navbar-custom .navbar-nav .nav-link {color:rgb(141, 148, 141)}
+.navbar-custom .nav-item:hover .nav-link {color:rgb(35, 95, 0)}
+#kamera {background-color: blue; width: 100%; height: 600px;}
+.btn-secondary {padding-left: 100px; padding-right: 100px; margin-left: 20px; margin-right: 80px;}
+
+.cam{
+max-width: 100%;
+display:flex;
+margin:auto;
+}

@@ -1,0 +1,252 @@
+{% extends "base.html"%}
+{% block title %}Dodawanie użytkownika{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+        <div id='tytuł'><h1>Wykresy</h1></div>
+    </div>
+
+    <div class="row justify-content-center mt-1">
+        <div class="col-md-4 m-auto text-center">
+            <label for="czas_wykresu">Wybierz czas pokazany na wykresie z dnia (dla ruchu tylko jeden dzień)</label><br>
+            <input type="date" id="start" name="start_date" min="2021-07-01" max="2023-01-20" value="2021-07-01">   <br>
+            <label for="czas_wykresu">+</label><br>
+            <input type="range" class="form-control-range" id="czas_wykresu" min="1" max="7"
+              onChange="document.getElementById('aktualne').innerText = document.getElementById('czas_wykresu').value">
+            <span id="aktualne">3</span> dni
+        </div>
+    </div>
+    <div class="row justify-content-center mt-1">
+        <div class="col-md-4 m-auto text-center">
+        <button class="btn btn-dark" onclick="wykres('temp',document.getElementById('czas_wykresu').value,document.getElementById('start').value)">Wyświetl wykres temp.</button>
+        <button class="btn btn-dark ml-2" onclick="wykres('wilg',document.getElementById('czas_wykresu').value,document.getElementById('start').value)">Wyświetl wykres wilg.</button>
+        <button class="btn btn-dark ml-2" onclick="wykres('ruch',document.getElementById('czas_wykresu').value,document.getElementById('start').value)">Wyświetl wykres ruchu</button>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+    <div id="chart_div" class="col-md-6 m-auto text-center"></div>
+    </div>
+    <div class="row justify-content-center mt-3"></div>
+    <div id="ruch_div" class="col-md-6 m-auto mb-5"></div>
+    </div>
+
+
+</div>
+
+
+<script>
+  var dt = new Date();
+  el = document.getElementById("start");
+  el.value = dt.toISOString().substring(0, 10);;
+function wykres(x = '',y=1,data){
+$(document).ready(function(){
+data_split = data.split('-')
+rok = parseInt(data_split[0])
+miesiac = parseInt(data_split[1])
+dzien = parseInt(data_split[2])
+var data_python = "/_wykres?value=" + x + "&time="+y+"&year="+rok+"&month="+miesiac+"&day="+dzien;
+$.getJSON(data_python,{
+    type: "GET",
+    format: "json",
+})
+.done(function(data_python){
+    console.log(data_python);
+    console.log(typeof(data_python));
+    console.log(x)
+
+    
+
+
+    google.charts.load('current', {'packages':['line']});
+    google.charts.load('current', {'packages':['corechart']});
+    if(data_python == false){
+      document.getElementById('chart_div').innerHTML = "<span style='text-align:center;'>Podałeś zły zakres dat <br>Nie ma danych dla tej daty</span>"
+    }
+    else if(x == 'temp'){
+    google.charts.setOnLoadCallback(drawChartTemp);
+    document.getElementById('ruch_div').innerHTML = '';
+    console.log(document.getElementById('czas_wykresu').value)
+    tmp = data_python[0]['wilgotnosc']
+    }
+    else if(x == 'wilg'){
+    google.charts.setOnLoadCallback(drawChartWilg);
+    document.getElementById('ruch_div').innerHTML = '';
+    console.log(document.getElementById('czas_wykresu').value)
+    tmp = data_python[0]['wilgotnosc']
+    }
+    else if(x == 'ruch'){
+        tmp = data_python[0]['Ruch']
+        console.log(Object.keys(tmp)[0])
+        google.charts.setOnLoadCallback(drawChartRuch);
+     //   google.charts.setOnLoadCallback(drawChartRuchKolo);
+    }
+    
+
+    function drawChartTemp() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Godzina');
+      data.addColumn('number', 'Temperatura');
+        var i = parseInt(Object.keys(tmp)[0])
+        var count = 0
+        console.log(count)
+        if(y == 1)
+          dni = 1
+        else if(y >1 && y <= 7)
+          dni = 4
+        else if(y > 7 && y < 31)
+          dni = 8
+        else if(y > 31 && y < 90)
+          dni = 12
+        else if(y> 90)
+          dni = 24
+
+      while(count < y){
+        while(data_python[count]['godzina'][i] != null){
+          data.addRows([[data_python[count]['godzina'][i] + " "+data_python[count]['dzienmsc'][i] 
+          + "." +data_python[count]['miesiac'][i],data_python[count]['temperatura'][i]]]);
+          i += dni;
+        }
+        if(data_python[count]['godzina'][i] == null){
+        break;
+        }
+    }
+
+      var options = {
+        chart: {
+          title: 'Wykres zmian temperatury w ciągu ' + y + ' dni',
+          subtitle: "Co " + dni/2 + " godzin"
+        },
+        width: 1000,
+        height: 500,
+        series: {
+            0:{axis:'Temp'}
+        },
+        axes: {
+          x: {
+            0: {side: 'bottom'}
+          },
+          y:{
+            Temp: {label: "Temp. (°C)"}
+          }
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('chart_div'));
+      chart.draw(data, google.charts.Line.convertOptions(options));
+
+    }
+    function drawChartWilg() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Godzina');
+      data.addColumn('number', 'Wilgotnosc');
+        var i = parseInt(Object.keys(tmp)[0])
+        var count = 0
+        console.log(count)
+        if(y == 1)
+          dni = 1
+        else if(y >1 && y < 7)
+          dni = 4
+        else if(y > 7 && y < 31)
+          dni = 8
+        else if(y > 31 && y < 90)
+          dni = 12
+        else if(y> 90)
+          dni = 24
+
+      while(count < y){
+        while(data_python[count]['godzina'][i] != null){
+          data.addRows([[data_python[count]['godzina'][i] + " "+data_python[count]['dzienmsc'][i] + "." +data_python[count]['miesiac'][i],data_python[count]['wilgotnosc'][i]]]);
+          i += dni;
+        }
+        if(data_python[count]['godzina'][i] == null){
+        break;
+        }
+      }
+
+      var options = {
+        chart: {
+          title: 'Wykres zmian wilgotnosci w ciągu ' + y + ' dni',
+          subtitle: "Co " + dni/2 + " godzin"
+        },
+        width: 1000,
+        height: 500,
+        series: {
+            0:{axis:'Wilg'}
+        },
+        axes: {
+          x: {
+            0: {side: 'bottom'}
+          },
+          y:{
+            Wilg: {label: "Wilg. (%)"}
+          }
+        }
+      };
+
+var chart = new google.charts.Line(document.getElementById('chart_div'));
+chart.draw(data, google.charts.Line.convertOptions(options));
+
+}
+    function drawChartRuch(){
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Godzina');
+        data.addColumn('number', 'Ruch');
+
+        var i = parseInt(Object.keys(tmp)[0])
+        var count = 0
+        while(count < y){
+        while(data_python[count]['godzina'][i] != null){
+          data.addRows([[data_python[count]['godzina'][i],data_python[count]['Ruch'][i]]]);
+          console.log(data_python[count]['Ruch'][i])
+          i += 1;
+        }
+        if(data_python[count]['godzina'][i] == null){
+        break;
+        }
+      }
+
+        var options = {
+        chart: {
+          title: 'Wykres ruchu w ciągu dnia'
+        },
+        width: 900,
+        height: 500,
+        series: {
+            0:{axis:'Ruch',
+	       opacity: 0.1,
+               dataOpacity: 0}
+        },
+        axes: {
+          x: {
+            0: {side: 'bottom'}
+          },
+          y:{
+            Ruch: {label: "Ruch"},
+          }
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('ruch_div'));
+      chart.draw(data, google.charts.Line.convertOptions(options));
+
+    }
+    
+    
+})
+
+})
+
+}
+
+
+</script>
+
+
+
+
+{% endblock %}
+ 

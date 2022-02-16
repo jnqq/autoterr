@@ -1,0 +1,33 @@
+{% extends "base.html"%}
+{% block title %}Zdjęcia i filmy{% endblock %}
+{%block content%}
+<div class="container">
+<div class="justify-content-center text-center">
+<div class="col-md-10 m-auto">
+<div class="row mt-3" style="display:inherit !important; float:left;">
+<h2>Lista zdjęć</h2>
+{% for element in picList  %}
+<div class="screenshot_div mt-2" style="float:left;width:25%;padding-right:1%;padding-left:1%;">
+<img src="{{ url_for('routes.downloadpic', filename= element) }}" style="width:100%">
+<figcaption>
+<a class="screenshot_element" style="word-break: break-word;color:white !important;"  href="{{ url_for( 'routes.downloadpic', filename = element ) }}">{{element}}</a>
+</figcaption>
+</div>
+{%endfor%}
+</div>
+<div class="row mt-3" style="display:inherit !important;">
+<h2>Lista filmów</h2>
+{% for element in vidList  %}
+<div class="video_div mt-2" style="float:left; width:25%; padding-right:1%;padding-left:1%;">
+<video width="100%" height="100%" controls>
+<source src="{{ url_for('routes.downloadvid', filename = element) }}" >
+<a class ="video_element"  href="{{ url_for( 'routes.downloadvid', filename = element ) }}">{{element}}</a>
+</video>
+<a class="video_element" style="color:white !important" href="{{ url_for( 'routes.downloadvid', filename = element ) }}">{{element}}</a>
+</div>
+{%endfor%}
+</div>
+</div>
+</div>
+{%endblock%}
+

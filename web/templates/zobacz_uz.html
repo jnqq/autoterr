@@ -1,0 +1,46 @@
+{% extends "base.html"%}
+{% block title %}Zobacz użytkowników{% endblock %}
+{% block content %}
+
+<div class='header'>
+    <div class='rectangle'>
+        <div id="tytuł">
+            <h1>Lista użytkowników</h1>
+            <p>Tutaj zobaczysz wszystkich użytkowników, jak i możesz ich zeedytować/usunąć</p>
+        </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="justify-content-center text-center">
+
+<div class="col-md-8 m-auto">
+        <table class="table table-striped tabelka">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="{{ request.path }}" method="POST">
+                {% for user in users %}
+                <tr>
+                    <th scope="row">{{ user.id }}</th>
+                    <th>{{ user.username }}</th>
+                    <th>{{ user.role }}</th>
+                    <th><button type="submit" class="btn btn-success" ><a href="/edit_user?id={{ user.id }}" style="color:white">Edit user</a> </button></th>
+                    <th><button type="submit" name="delete" class="btn btn-success" value= {{ user.id }}>Delete user</th>
+                </tr>
+                {% endfor %}
+            </tbody></form>
+        </table></div>
+        </div>
+
+  </div>
+
+
+  {% endblock %}

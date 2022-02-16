@@ -1,0 +1,177 @@
+{% extends "base.html"%}
+{% block title %}Strona główna{% endblock %}
+
+
+{% block content%}
+<style>
+.btn-secondary {padding-left: 100px; padding-right: 100px; margin-left: 20px; margin-right: 80px;}
+</style>
+
+ <script type=text/javascript>
+        function refresh(){
+                $(document).ready(function(){
+                        var datalink = "/_background_process";
+                        $.getJSON(datalink, {
+                                type: "GET",
+                                format: "json",
+                        })
+                        .done(function ( data ) {
+                                $("#humidity").html("Wilgotność: " + data[0] + '%');
+                                $("#temperature").html("Temperatura: " + data[1] + '\u00B0C');
+								$("#last_motion").html("Ostatni ruch: " + data[7]);
+				console.log(data);
+						})
+                });
+        };
+        setInterval(refresh, 1000);
+ </script>
+
+		<div class="container-fluid">
+
+    <div class="row justify-content-center">
+        <div id='tytuł'><h1>Strona główna</h1>
+            <h3>Witaj, {{user}}</h3> 
+            {% if mode == 'automatyczny' %}
+            <h4 class="m-auto index_name mt-2">Wybrany tryb dla: <b>{{ animalName }}</b></h4>
+            {% elif mode == 'manualny' %}
+            <h4 class="m-auto index_name mt-2">Wybrano tryb <b>manualny</b></h4>
+            {% endif %}
+</div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center mb-3 ">
+ <form action="/_recording" method="POST">              
+ <button class="btn btn-dark"  onclick="window.location.href='{{ url_for('routes.screenshot') }}';"  ><i class="bi bi-camera"></i> Screenshot</button>
+                <button class="btn btn-dark ml-2" type="submit" onclick="window.location.href='{{ url_for('routes.recording') }}?document.getElementById('time').value';" ><i class="bi bi-camera-video"></i> Rozpocz. nagrywanie</button>
+                <div class="form-group">
+    			
+<label for="time">Wybierz czas nagrywania</label>
+    			<select class="form-control" style="width:25%;margin:auto;" id="time" name="time">
+      	<option value="5" >5 sek</option>
+      <option value="10" >10 sek</option>
+      <option value="15">15 sek</option>
+      <option value="30" >30 sek</option>
+      <option value="60" >60 sek</option>
+    </select>
+</form>
+  </div>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+
+    <span id="v1" style="display: none;">
+    <div  class="col-md-6 float-left">
+	<img class="cam" src="{{url_for('routes.stream')}}">
+    </div>
+    </span>
+
+	<div class="col-md-3 float-left">
+        <div class="row">
+            <div class="col-md-12 text-center mt-5 ml-1">
+                <p><b>Zadane parametry:</b></p>
+                <p>Temperatura za dnia: {{ day_temp }}°C</p>
+                <p>Temperatura w nocy: {{ night_temp }}°C</p>
+                <p>Wilgotność: {{ day_wet }}%</p>
+                <p>Rozpoczęcie trybu dziennego: {{ day_start }}:00</p>
+                <p>Rozpoczęcie trybu nocnego: {{ night_start }}:00 </p>
+            </div>
+        </div>
+    </div>
+<span id="v2" style="display: block;">
+    <div  class="col-md-6 float-left">
+        <img class="cam" src="{{url_for('routes.stream')}}">
+    </div>
+</span>
+
+    <div class="col-md-3 float-left">
+     <div class="col-md-12 text-center mt-5">
+        <p class="params"><b>Aktualne parametry:</b></p>
+        <p class="time">Godzina: <i>czekaj...</i></p>
+        <p id='temperature'>Temperatura: <i>czekaj...</i></p>
+        <p id='humidity'>Wilgotność: <i>czekaj...</i></p>
+		<p id='last_motion'>Ostatni ruch: <i>czekaj...</> </p> 
+
+		{% if pointer == True %}
+        <button class="btn btn-dark mb-5" id="led" onclick="window.location.href='{{ url_for('routes.ledOff') }}';"><i class="bi bi-lightbulb-fill"></i>Zgaś światło</button>
+		{% else %}
+        <button class="btn btn-dark mb-5" id="led" onclick="window.location.href='{{ url_for('routes.ledOn') }}';" ><i class="bi bi-lightbulb"></i>Zapal światło</button>
+		{% endif %} 
+    </div>
+    </div>
+</div>
+
+<script>
+
+width = window.innerWidth
+
+console.log(width)
+
+if( width < 770){
+  document.getElementById("v2").style.display="none";
+  document.getElementById("v1").style.display="block";
+}
+
+if(width > 770){
+  document.getElementById("v2").style.display="block";
+  document.getElementById("v1").style.display="none";
+}
+
+var led = document.getElementById("led").innerText;
+console.log(led);
+
+function showNotification(){
+	const notification = new Notification("Światło",{
+		body: "Światło się zapaliło",
+		icon: ""});
+
+	notification.onclick = e =>{
+		window.location.href = "http://100.121.91.138:2137";
+}
+
+}
+
+console.log(Notification.permission);
+
+	if(Notification.permission === "granted"){
+		if(led === "Zgaś światło"){
+			showNotification();
+}}
+	else if(Notification.permission !== "denied"){
+		Notification.requestPermission().then(permission=>{
+			if(permission === 'granted')
+				showNotification();})
+}
+
+function time(){
+    const data = new Date();
+    const ele = document.querySelector(".time");
+
+    const html = "Godzina: " + data.getHours() + ":" + data.getMinutes() + ":" + data.getSeconds();
+    ele.innerText = html;
+    }
+
+     setInterval(time,1000);
+
+
+if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register("/sw.js", { scope: '/' })
+        .then(function(registration) {
+          // Registration was successful
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    } 
+
+
+
+
+</script>
+
+</div>
+{% endblock %}
+

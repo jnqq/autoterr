@@ -1,0 +1,56 @@
+{% extends "base.html"%}
+{% block title %}Zobacz zwierzaki{%endblock %}
+{% block content %}
+
+<div class='header'>
+    <div class='rectangle'>
+        <div id="tytuł">
+            <h1>Lista zwierzaków</h1>
+            <p>Tutaj zobaczysz wszystkie zwierzaki, jak i możesz ich zeedytować/usunąć</p>
+        </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="justify-content-center text-center">
+
+<div class="col-md-8 m-auto">
+        <table class="table tabelka">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Day temp.</th>
+                    <th scope="col">Night temp.</th>
+                    <th scope="col">Day wet</th>
+                    <th scope="col">Night wet</th>
+                    <th scope="col">Day start</th>
+                    <th scope="col">Night start</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <form action="{{ request.path }}" method="POST">
+                {% for animal in animals %}
+                <tr>
+                    <th scope="row">{{ animal.id }}</th>
+                    <th>{{ animal.animal_name }}</th>
+                    <th>{{ animal.day_temp }}</th>
+                    <th>{{ animal.night_temp }}</th>
+                    <th>{{ animal.day_wet }}</th>
+                    <th>{{ animal.night_wet }}</th>
+                    <th>{{ animal.day_start }}</th>
+                    <th>{{ animal.night_start }}</th>
+                    <th><button type="submit" class="btn btn-success" ><a href="/edit_animal?id={{ animal.id }}" style="color:white">Edit animal</a> </button></th>
+                    <th><button type="submit" name="delete" class="btn btn-success" value= {{ animal.id }}>Delete animal</th>
+                </tr>
+                {% endfor %}
+            </tbody></form>
+        </table>
+    </div>
+
+  </div>
+
+
+  {% endblock %}

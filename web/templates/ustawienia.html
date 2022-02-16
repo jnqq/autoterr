@@ -1,0 +1,49 @@
+{% extends "base.html"%}
+{% block title %}Ustawienia{% endblock %}
+{% block content %}
+
+<div class='header'>
+    <div class='rectangle'>
+        <div id="tytuł">
+            <h1>Ustawienia</h1>
+            <p>Tutaj dokonasz zmiany ustawień swojego konta.</p>
+        </div>
+    </div>
+  </div>
+
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+
+        <form action="{{ request.path }}?user={{ user }}&typ=zmiana_hasla" method = "post">
+            <h4 class="mb-3">Zmień hasło</h4>
+            <div class="form-group">
+                <label for="new_password" required>Nowe hasło</label><br>
+                <input type="password" id="password" name="passw1" required><br>
+                <label for="new_password1" required>Powtórz nowe hasło</label><br>
+                <input type="password" id="password1" name="passw2" required><br>
+            </div>
+            <button type="submit" class="btn btn-success">Zmień hasło</button>
+        </form>
+    </div>
+   
+   <form action="{{ request.path }}?user={{ user }}&typ=zmiana_nazwy" method = "post">
+   
+<div class="col-md-12 text-center">
+        <h4 class="mb-3">Zmień nazwę użytkownika</h4>
+        <div class="form-group">
+          <label for="username" required>Nowa nazwa</label><br>
+          <input type="username" id="username" name="username" required><br>
+          <label for="username2" required>Powtórz nową nazwę</label><br>
+          <input type="username2" id="username2" name="username2" required><br>
+      </div> 
+        <div id="lista2"><button type="submit" name="zmiana_nazwy" class="btn btn-success">Zatwierdź</button></div></form>
+      </br></br>
+
+    </div>
+          <div class="col-md-2"></div>
+    </div>
+</div>
+{% endblock %}
